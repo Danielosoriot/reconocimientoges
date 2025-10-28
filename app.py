@@ -4,7 +4,6 @@ import numpy as np
 from PIL import Image
 from keras.models import load_model
 import platform
-import base64
 
 # --- CONFIGURACIÓN DE PÁGINA ---
 st.set_page_config(
@@ -13,43 +12,44 @@ st.set_page_config(
     layout="centered"
 )
 
-# --- FONDO PERSONALIZADO ---
-def set_bg(image_file):
-    with open(image_file, "rb") as f:
-        data = f.read()
-    b64 = base64.b64encode(data).decode()
-    st.markdown(
-        f"""
-        <style>
-        .stApp {{
-            background-image: url("data:image/png;base64,{b64}");
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            color: white;
-            font-family: 'Trebuchet MS', sans-serif;
-        }}
-        h1, h2, h3, h4, h5, h6 {{
-            text-shadow: 2px 2px 8px #000000;
-        }}
-        .css-1d391kg, .css-1v3fvcr {{
-            background-color: rgba(0, 0, 0, 0.7) !important;
-            border-radius: 12px;
-            padding: 10px;
-        }}
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
+# --- FONDO CON DEGRADADO NEGRO → ROJO ---
+page_bg = """
+<style>
+.stApp {
+    background: linear-gradient(180deg, #000000 0%, #660000 50%, #cc0000 100%);
+    background-attachment: fixed;
+    color: white;
+    font-family: 'Trebuchet MS', sans-serif;
+}
+h1, h2, h3, h4, h5, h6 {
+    text-shadow: 2px 2px 8px #000000;
+}
+.css-1d391kg, .css-1v3fvcr {
+    background-color: rgba(0, 0, 0, 0.7) !important;
+    border-radius: 15px;
+    padding: 12px;
+}
+.stButton>button {
+    background: linear-gradient(90deg, #ff0000, #660000);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-weight: bold;
+}
+.stButton>button:hover {
+    background: linear-gradient(90deg, #ff3333, #990000);
+}
+</style>
+"""
+st.markdown(page_bg, unsafe_allow_html=True)
 
-# --- APLICA FONDO ---
-set_bg("fondo_anuel.jpg")  # pon tu propia imagen de fondo aquí
-
-# --- CARGA DEL MODELO ---
+# --- ENCABEZADO ---
 st.title("🎶 ANUEL AI RECON 🔥")
 st.markdown("### *‘Real hasta la muerte... pero digital’* 💀")
 st.write("Versión de Python:", platform.python_version())
 
+# --- CARGA DEL MODELO ---
 model = load_model('keras_model.h5')
 data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
 
@@ -59,12 +59,12 @@ with col2:
     image = Image.open('OIG5.jpg')
     st.image(image, width=330, caption="Modo Anuel activado 🎧")
 
-# --- SIDEBAR CON INFO ---
+# --- SIDEBAR ---
 with st.sidebar:
-    st.markdown("## 📸 Modo Cámara")
-    st.write("Usa un modelo entrenado en Teachable Machine para identificar tus movimientos o gestos al ritmo de *Anuel AI* 🧠🎤")
+    st.markdown("## 📸 Cámara con Flow")
+    st.write("Usa tu modelo entrenado en Teachable Machine para reconocer tus movimientos al ritmo del trap 🧠🎤")
     st.markdown("---")
-    st.markdown("**Consejo:** toma la foto con buena luz para mejores resultados 🔦")
+    st.markdown("**Consejo:** buena luz = mejores resultados 🔦")
 
 # --- ENTRADA DE CÁMARA ---
 img_file_buffer = st.camera_input("Haz tu foto con flow 😎")
@@ -92,5 +92,5 @@ if img_file_buffer is not None:
     else:
         st.warning("👀 No se pudo identificar claramente el movimiento. Intenta otra pose.")
 
-    st.markdown("### 💿 *‘Otro palo más de la inteligencia artificial’*")
+    st.markdown("### 💿 *‘Otro palo más de la inteligencia artificial’* 🎶")
 
