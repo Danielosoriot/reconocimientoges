@@ -56,7 +56,7 @@ data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
 # --- IMAGEN PRINCIPAL ---
 col1, col2, col3 = st.columns([1,2,1])
 with col2:
-    image = Image.open('OIG5.jpg')
+    image = Image.open('anuel2.png')
     st.image(image, width=330, caption="Modo Anuel activado 🎧")
 
 # --- SIDEBAR ---
